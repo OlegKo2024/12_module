@@ -1,5 +1,7 @@
 import unittest
 
+print('Задача "Проверка на последнего"')
+
 class Runner:
     def __init__(self, name, speed=5):
         self.name = name
@@ -41,6 +43,8 @@ class Tournament:
         return finishers
 
 class TournamentTest(unittest.TestCase):
+    is_frozen = True
+
 
     @classmethod
     def setUpClass(cls):
@@ -51,18 +55,21 @@ class TournamentTest(unittest.TestCase):
         self.runner2 = Runner("Андрей", speed=9)
         self.runner3 = Runner("Ник", speed=3)
 
+    @unittest.skipIf(is_frozen is True, 'Тесты в этом кейсе заморожены')
     def test_first_run(self):
         first_run = Tournament(90, self.runner1, self.runner3)
         results = first_run.start()
         TournamentTest.all_results[1] = results  # Сохраняем результаты первого теста
         self.assertEqual(results[max(results.keys())], 'Ник')
 
+    @unittest.skipIf(is_frozen is True, 'Тесты в этом кейсе заморожены')
     def test_second_run(self):
         first_run = Tournament(90, self.runner2, self.runner3)
         results = first_run.start()
         TournamentTest.all_results[2] = results  # Сохраняем результаты второго теста
         self.assertEqual(results[max(results.keys())], 'Ник')
 
+    @unittest.skipIf(is_frozen is True, 'Тесты в этом кейсе заморожены')
     def test_third_run(self):
         first_run = Tournament(90, self.runner1, self.runner2, self.runner3)
         results = first_run.start()
@@ -73,6 +80,11 @@ class TournamentTest(unittest.TestCase):
     def tearDownClass(cls):
         for test_number, test_result in cls.all_results.items():
             print(test_result)
+
+# Да, вы правы. В вашем коде использование TournamentTest.all_results.items() также сработает корректно, поскольку вы
+# обращаетесь к атрибуту класса all_results напрямую через имя класса. Однако есть несколько причин, по которым это
+# не является наилучшей практикой
+
 
 if __name__ == '__main__':
     unittest.main()
